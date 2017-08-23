@@ -1,6 +1,9 @@
 let tree = [{
     "data": "ParentNode1",
-    "children": [],
+    "children": [{
+        "data": "ChildNode1",
+        "children": [],
+      }],
   },
   {
     "data": "ParentNode2",
@@ -43,36 +46,30 @@ export let hasChildren = (node) => {
 }
 
 // @node - target node
-let getChildren = (node) => {
-  console.log(node);
-  let view = view || "";
-  node.children.forEach(child => {
-    view += `<li class="node">`;
-    if (hasChildren(child)) {
-      view += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
-    }
-    view += `<div class="node__heading">${child.data}</div></li>`
-  });
-  view += `</ul>`;
-  return view;
-}
-
-// @node - target node
 // @view - result html code
 export let recursiveGetChildren = (node, view) => {
-  // view = view || "";
-  node.children.forEach(child => {
-    console.log(child);
-    view += `<li class="node">`;
-    if (hasChildren(child)) {
-      view += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
-    }
-    view += `<div class="node__heading">${child.data}</div></li>`;
-    if (hasChildren(child))
-      view += recursiveGetChildren(child, view);
 
+  node.children.forEach(child => {
+
+    view += `<li class="node"><div class="node__heading">`;
+    if (hasChildren(child)) {
+      view += `<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>`;
+    }
+    view += `<span class="node__heading-text">${child.data}</span></div>`;
+
+    if (hasChildren(child)) {
+      view += `<ul class="node__content node__content--collapsed">`;
+      view = recursiveGetChildren(child, view);
+      view += `</ul></li>`;
+    }
   });
 
   return view;
 
 }
+
+// export let setControlClasses = () => {
+//   let treeNodes = document.querySelector('.node');
+//
+//   treeNodes.forEach(node)
+// }

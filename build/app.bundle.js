@@ -80,16 +80,26 @@ Tree.showAllNodes().then(function (tree) {
   var data = '';
   tree.forEach(function (node) {
     var hasChildren = Tree.hasChildren(node);
-    data += '<li class="node">';
+    data += '<li class="node"><div class="node__heading">';
     if (hasChildren) {
-      data += '<i class="glyphicon glyphicon-chevron-right node__expand"></i>';
+      data += '<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>';
     }
-    data += '<div class="node__heading">' + node.data + '</div>';
+    data += '<span class="node__heading-text">' + node.data + '</span></div>';
     if (hasChildren) {
-      data += '<ul class="node__content">' + Tree.recursiveGetChildren(node, "") + '</ul>';
+      data += '<ul class="node__content node__content--collapsed">' + Tree.recursiveGetChildren(node, "") + '</ul>';
     }
     data += '</li>';
-  });document.getElementById("treeview").innerHTML = data;
+  });
+  document.getElementById("treeview").innerHTML = data;
+
+  $('.node__heading').on('click', function () {
+    var target = $(this).next();
+    var icon = $(this).find('.node__expand');
+    if (target.hasClass('node__content')) {
+      target.slideToggle();
+      icon.toggleClass('node__expand--collapsed').toggleClass('node__expand--expanded');
+    }
+  });
 }).catch(function (e) {
   return console.log(e);
 });
@@ -106,7 +116,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 var tree = [{
   "data": "ParentNode1",
-  "children": []
+  "children": [{
+    "data": "ChildNode1",
+    "children": []
+  }]
 }, {
   "data": "ParentNode2",
   "children": [{
@@ -146,36 +159,32 @@ var hasChildren = exports.hasChildren = function hasChildren(node) {
 };
 
 // @node - target node
-var getChildren = function getChildren(node) {
-  console.log(node);
-  var view = view || "";
-  node.children.forEach(function (child) {
-    view += "<li class=\"node\">";
-    if (hasChildren(child)) {
-      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand\"></i>";
-    }
-    view += "<div class=\"node__heading\">" + child.data + "</div></li>";
-  });
-  view += "</ul>";
-  return view;
-};
-
-// @node - target node
 // @view - result html code
 var recursiveGetChildren = exports.recursiveGetChildren = function recursiveGetChildren(node, view) {
-  // view = view || "";
+
   node.children.forEach(function (child) {
-    console.log(child);
-    view += "<li class=\"node\">";
+
+    view += "<li class=\"node\"><div class=\"node__heading\">";
     if (hasChildren(child)) {
-      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand\"></i>";
+      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand node__expand--collapsed\"></i>";
     }
-    view += "<div class=\"node__heading\">" + child.data + "</div></li>";
-    if (hasChildren(child)) view += recursiveGetChildren(child, view);
+    view += "<span class=\"node__heading-text\">" + child.data + "</span></div>";
+
+    if (hasChildren(child)) {
+      view += "<ul class=\"node__content node__content--collapsed\">";
+      view = recursiveGetChildren(child, view);
+      view += "</ul></li>";
+    }
   });
 
   return view;
 };
+
+// export let setControlClasses = () => {
+//   let treeNodes = document.querySelector('.node');
+//
+//   treeNodes.forEach(node)
+// }
 
 /***/ })
 /******/ ]);

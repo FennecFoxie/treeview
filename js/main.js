@@ -5,15 +5,26 @@ Tree.showAllNodes()
       let data = '';
       tree.forEach(node => {
           let hasChildren = Tree.hasChildren(node);
-          data += `<li class="node">`;
+          data += `<li class="node"><div class="node__heading">`;
           if (hasChildren) {
-            data += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
+            data += `<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>`;
           }
-          data += `<div class="node__heading">${node.data}</div>`;
+          data += `<span class="node__heading-text">${node.data}</span></div>`;
           if (hasChildren) {
-            data += `<ul class="node__content">${Tree.recursiveGetChildren(node, "")}</ul>`;
+            data += `<ul class="node__content node__content--collapsed">${Tree.recursiveGetChildren(node, "")}</ul>`;
             }
             data += `</li>`;
-          }); document.getElementById("treeview").innerHTML = data;
+          });
+          document.getElementById("treeview").innerHTML = data;
+
+
+          $('.node__heading').on('click', function() {
+            let target = $(this).next();
+            let icon = $(this).find('.node__expand');
+            if(target.hasClass('node__content')) {
+              target.slideToggle();
+              icon.toggleClass('node__expand--collapsed').toggleClass('node__expand--expanded');
+            }
+          });
       })
     .catch(e => console.log(e));
