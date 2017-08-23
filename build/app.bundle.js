@@ -79,11 +79,21 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 Tree.showAllNodes().then(function (tree) {
   var data = '';
   tree.forEach(function (node) {
-    data += '<li class="node"><i class="glyphicon glyphicon-chevron-right"></i><div class="node__heading">' + node.data + '</div>';
-    if (node.children.length > 0) {
+    var hasChildren = Tree.hasChildren(node);
+    data += '<li class="node">';
+    if (hasChildren) {
+      data += '<i class="glyphicon glyphicon-chevron-right node__expand"></i>';
+    }
+    data += '<div class="node__heading">' + node.data + '</div>';
+    if (hasChildren) {
       data += '<ul class="node__content">';
       node.children.forEach(function (child) {
-        data += '<li class="node"><i class="glyphicon glyphicon-chevron-right"></i><div class="node__heading">' + child.data + '</div></li>';
+        var hasChildren = Tree.hasChildren(child);
+        data += '<li class="node">';
+        if (hasChildren) {
+          data += '<i class="glyphicon glyphicon-chevron-right node__expand"></i>';
+        }
+        data += '<div class="node__heading">' + child.data + '</div></li>';
       });
       data += '</ul>';
     }
@@ -131,6 +141,14 @@ var showAllNodes = exports.showAllNodes = function showAllNodes() {
       reject("No data avaliable");
     }
   });
+};
+
+var hasChildren = exports.hasChildren = function hasChildren(node) {
+  if (node.children.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 /***/ })

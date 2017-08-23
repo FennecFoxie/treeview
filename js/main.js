@@ -4,11 +4,21 @@ Tree.showAllNodes()
   .then(tree => {
       let data = '';
       tree.forEach(node => {
-          data += `<li class="node"><i class="glyphicon glyphicon-chevron-right"></i><div class="node__heading">${node.data}</div>`;
-          if (node.children.length > 0) {
+          let hasChildren = Tree.hasChildren(node);
+          data += `<li class="node">`;
+          if (hasChildren) {
+            data += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
+          }
+          data += `<div class="node__heading">${node.data}</div>`;
+          if (hasChildren) {
             data += `<ul class="node__content">`;
             node.children.forEach(child => {
-               data += `<li class="node"><i class="glyphicon glyphicon-chevron-right"></i><div class="node__heading">${child.data}</div></li>`
+              let hasChildren = Tree.hasChildren(child);
+                data += `<li class="node">`;
+              if (hasChildren) {
+                data += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
+              }
+               data += `<div class="node__heading">${child.data}</div></li>`
               });
               data += `</ul>`;
             }
