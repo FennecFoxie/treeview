@@ -86,16 +86,7 @@ Tree.showAllNodes().then(function (tree) {
     }
     data += '<div class="node__heading">' + node.data + '</div>';
     if (hasChildren) {
-      data += '<ul class="node__content">';
-      node.children.forEach(function (child) {
-        var hasChildren = Tree.hasChildren(child);
-        data += '<li class="node">';
-        if (hasChildren) {
-          data += '<i class="glyphicon glyphicon-chevron-right node__expand"></i>';
-        }
-        data += '<div class="node__heading">' + child.data + '</div></li>';
-      });
-      data += '</ul>';
+      data += '<ul class="node__content">' + Tree.recursiveGetChildren(node, "") + '</ul>';
     }
     data += '</li>';
   });document.getElementById("treeview").innerHTML = data;
@@ -125,7 +116,10 @@ var tree = [{
     "data": "ChildNode2",
     "children": [{
       "data": "GrandChildNode1",
-      "children": []
+      "children": [{
+        "data": "GrandGrandChildNode1",
+        "children": []
+      }]
     }]
   }]
 }, {
@@ -149,6 +143,38 @@ var hasChildren = exports.hasChildren = function hasChildren(node) {
   } else {
     return false;
   }
+};
+
+// @node - target node
+var getChildren = function getChildren(node) {
+  console.log(node);
+  var view = view || "";
+  node.children.forEach(function (child) {
+    view += "<li class=\"node\">";
+    if (hasChildren(child)) {
+      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand\"></i>";
+    }
+    view += "<div class=\"node__heading\">" + child.data + "</div></li>";
+  });
+  view += "</ul>";
+  return view;
+};
+
+// @node - target node
+// @view - result html code
+var recursiveGetChildren = exports.recursiveGetChildren = function recursiveGetChildren(node, view) {
+  // view = view || "";
+  node.children.forEach(function (child) {
+    console.log(child);
+    view += "<li class=\"node\">";
+    if (hasChildren(child)) {
+      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand\"></i>";
+    }
+    view += "<div class=\"node__heading\">" + child.data + "</div></li>";
+    if (hasChildren(child)) view += recursiveGetChildren(child, view);
+  });
+
+  return view;
 };
 
 /***/ })

@@ -10,12 +10,13 @@ let tree = [{
       },
       {
         "data": "ChildNode2",
-        "children": [
-          {
-            "data": "GrandChildNode1",
+        "children": [{
+          "data": "GrandChildNode1",
+          "children": [{
+            "data": "GrandGrandChildNode1",
             "children": [],
-          }
-        ],
+          }, ],
+        }],
       }
     ],
   },
@@ -34,26 +35,44 @@ export let showAllNodes = () => new Promise((resolve, reject) => {
 });
 
 export let hasChildren = (node) => {
-  if(node.children.length > 0) {
+  if (node.children.length > 0) {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
 
 // @node - target node
+let getChildren = (node) => {
+  console.log(node);
+  let view = view || "";
+  node.children.forEach(child => {
+    view += `<li class="node">`;
+    if (hasChildren(child)) {
+      view += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
+    }
+    view += `<div class="node__heading">${child.data}</div></li>`
+  });
+  view += `</ul>`;
+  return view;
+}
+
+// @node - target node
 // @view - result html code
-export let recursiveGetChildren(node, view) {
-  if(hasChildren(node)) {
-    node.children.forEach(child => {
-      let hasChildren = Tree.hasChildren(child);
-        data += `<li class="node">`;
-      if (hasChildren) {
-        data += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
-      }
-       data += `<div class="node__heading">${child.data}</div></li>`
-      });
-      data += `</ul>`;
-  }
+export let recursiveGetChildren = (node, view) => {
+  // view = view || "";
+  node.children.forEach(child => {
+    console.log(child);
+    view += `<li class="node">`;
+    if (hasChildren(child)) {
+      view += `<i class="glyphicon glyphicon-chevron-right node__expand"></i>`;
+    }
+    view += `<div class="node__heading">${child.data}</div></li>`;
+    if (hasChildren(child))
+      view += recursiveGetChildren(child, view);
+
+  });
+
+  return view;
+
 }
