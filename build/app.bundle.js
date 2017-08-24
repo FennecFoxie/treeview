@@ -67,124 +67,139 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+__webpack_require__(1);
+module.exports = __webpack_require__(3);
 
-
-var _treeData = __webpack_require__(1);
-
-var Tree = _interopRequireWildcard(_treeData);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-Tree.showAllNodes().then(function (tree) {
-  var data = '';
-  tree.forEach(function (node) {
-    var hasChildren = Tree.hasChildren(node);
-    data += '<li class="node"><div class="node__heading">';
-    if (hasChildren) {
-      data += '<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>';
-    }
-    data += '<span class="node__heading-text">' + node.data + '</span></div>';
-    if (hasChildren) {
-      data += '<ul class="node__content node__content--collapsed">' + Tree.recursiveGetChildren(node, "") + '</ul>';
-    }
-    data += '</li>';
-  });
-  document.getElementById("treeview").innerHTML = data;
-
-  $('.node__heading').on('click', function () {
-    var target = $(this).next();
-    var icon = $(this).find('.node__expand');
-    if (target.hasClass('node__content')) {
-      target.slideToggle();
-      icon.toggleClass('node__expand--collapsed').toggleClass('node__expand--expanded');
-    }
-  });
-}).catch(function (e) {
-  return console.log(e);
-});
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tree_data__ = __webpack_require__(2);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var tree = [{
-  "data": "ParentNode1",
-  "children": [{
-    "data": "ChildNode1",
-    "children": []
-  }]
-}, {
-  "data": "ParentNode2",
-  "children": [{
-    "data": "ChildNode1",
-    "children": []
-  }, {
-    "data": "ChildNode2",
+__WEBPACK_IMPORTED_MODULE_0__tree_data__["c" /* showAllNodes */]()
+  .then(tree => {
+      let data = '';
+      tree.forEach(node => {
+          let hasChildren = __WEBPACK_IMPORTED_MODULE_0__tree_data__["a" /* hasChildren */](node);
+          data += `<li class="node"><div class="node__heading">`;
+          if (hasChildren) {
+            data += `<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>`;
+          }
+          data += `<span class="node__heading-text">${node.data}</span></div>`;
+          if (hasChildren) {
+            data += `<ul class="node__content node__content--collapsed">${__WEBPACK_IMPORTED_MODULE_0__tree_data__["b" /* recursiveGetChildren */](node, "")}</ul>`;
+            }
+            data += `</li>`;
+          });
+          document.getElementById("treeview").innerHTML = data;
+
+
+          $('.node__heading').on('click', function() {
+            let target = $(this).next();
+            let icon = $(this).find('.node__expand');
+            if(target.hasClass('node__content')) {
+              target.slideToggle();
+              icon.toggleClass('node__expand--collapsed').toggleClass('node__expand--expanded');
+            }
+          });
+      })
+    .catch(e => console.log(e));
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return showAllNodes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hasChildren; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return recursiveGetChildren; });
+let tree = [{
+    "data": "ParentNode1",
     "children": [{
-      "data": "GrandChildNode1",
-      "children": [{
-        "data": "GrandGrandChildNode1",
-        "children": []
-      }]
-    }]
-  }]
-}, {
-  "data": "ParentNode3",
-  "children": []
-}];
+        "data": "ChildNode1",
+        "children": [],
+      }],
+  },
+  {
+    "data": "ParentNode2",
+    "children": [{
+        "data": "ChildNode1",
+        "children": [],
+      },
+      {
+        "data": "ChildNode2",
+        "children": [{
+          "data": "GrandChildNode1",
+          "children": [{
+            "data": "GrandGrandChildNode1",
+            "children": [],
+          }, ],
+        }],
+      }
+    ],
+  },
+  {
+    "data": "ParentNode3",
+    "children": [],
+  }
+];
 
-var showAllNodes = exports.showAllNodes = function showAllNodes() {
-  return new Promise(function (resolve, reject) {
-    if (tree) {
-      resolve(tree);
-    } else {
-      reject("No data avaliable");
-    }
-  });
-};
+let showAllNodes = () => new Promise((resolve, reject) => {
+  if (tree) {
+    resolve(tree);
+  } else {
+    reject("No data avaliable");
+  }
+});
 
-var hasChildren = exports.hasChildren = function hasChildren(node) {
+let hasChildren = (node) => {
   if (node.children.length > 0) {
     return true;
   } else {
     return false;
   }
-};
+}
 
 // @node - target node
 // @view - result html code
-var recursiveGetChildren = exports.recursiveGetChildren = function recursiveGetChildren(node, view) {
+let recursiveGetChildren = (node, view) => {
 
-  node.children.forEach(function (child) {
+  node.children.forEach(child => {
 
-    view += "<li class=\"node\"><div class=\"node__heading\">";
+    view += `<li class="node"><div class="node__heading">`;
     if (hasChildren(child)) {
-      view += "<i class=\"glyphicon glyphicon-chevron-right node__expand node__expand--collapsed\"></i>";
+      view += `<i class="glyphicon glyphicon-chevron-right node__expand node__expand--collapsed"></i>`;
     }
-    view += "<span class=\"node__heading-text\">" + child.data + "</span></div>";
+    view += `<span class="node__heading-text">${child.data}</span></div>`;
 
     if (hasChildren(child)) {
-      view += "<ul class=\"node__content node__content--collapsed\">";
+      view += `<ul class="node__content node__content--collapsed">`;
       view = recursiveGetChildren(child, view);
-      view += "</ul></li>";
+      view += `</ul></li>`;
     }
   });
 
   return view;
-};
+
+}
 
 // export let setControlClasses = () => {
 //   let treeNodes = document.querySelector('.node');
 //
 //   treeNodes.forEach(node)
 // }
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
